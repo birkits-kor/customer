@@ -246,9 +246,13 @@
     var year = document.getElementById("purchaseYear").value;
     var optionSelect = document.getElementById("upgradeOption");
     optionSelect.innerHTML = "";
-    var basePrice = (year === "2025년 이후") ? 10000 : 50000;
+    
+    /* 여기서 기본 가격을 10000원에서 15000원으로 변경했습니다! */
+    var basePrice = (year === "2025년 이후") ? 15000 : 50000; 
+    
     var sudoPrice = basePrice + 30000;
     var jibangPrice = basePrice + 60000;
+    
     optionSelect.options.add(new Option("방법 1. 완제품 자가 교체 (₩" + basePrice.toLocaleString() + " 입금)", "자가교체(" + basePrice.toLocaleString() + ")"));
     optionSelect.options.add(new Option("방법 2. 기사 방문 설치 - 수도권 (₩" + sudoPrice.toLocaleString() + " 입금)", "방문-수도권(" + sudoPrice.toLocaleString() + ")"));
     optionSelect.options.add(new Option("방법 3. 기사 방문 설치 - 지방 (₩" + jibangPrice.toLocaleString() + " 입금)", "방문-지방(" + jibangPrice.toLocaleString() + ")"));
