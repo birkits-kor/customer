@@ -43,6 +43,16 @@
     .address-group input { flex: 1; }
     .btn-search { background: #555; color: #fff; border: none; padding: 12px 15px; border-radius: 4px; cursor: pointer; white-space: nowrap; font-size: 14px; }
     
+    /* 탭 메뉴 스타일 */
+    .tab-container { display: flex; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
+    .tab-btn { flex: 1; padding: 15px; background: #fff; border: none; font-size: 16px; font-weight: bold; color: #999; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+    .tab-btn.active { color: #1a1a1a; border-bottom: 3px solid #1a1a1a; }
+    
+    /* 조회 박스 */
+    .search-box { background: #f0f2f5; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: center; }
+    .search-box input { margin-bottom: 10px; }
+    .btn-search-action { width: 100%; background: #0056b3; color: white; padding: 14px; border: none; border-radius: 4px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 5px; }
+
     /* 버튼 */
     .btn-submit { width: 100%; background: #1a1a1a; color: #fff; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
     .btn-submit:hover { background: #333; }
@@ -111,23 +121,11 @@
   <div class="section">
     <h2>⚠️ 주의 및 안내 사항</h2>
     <ul>
-      <li>신규앱 세팅 및 사용법은 버킷츠 유튜브에 있습니다.(위 교체 방법 링크 참조)</li>
-      <li><span class="highlight">2025년 이후 구매 고객님들</span>께는 업그레이드 비용을 지원드립니다. (택배비 또는 출장비 실비만 발생하며, 아래 신청 폼에서 연도 선택 시 금액이 자동 변경됩니다.)</li>
+      <li>신규앱 세팅 및 사용법은 버킷츠 유튜브에 있습니다.</li>
+      <li><span class="highlight">2025년 이후 구매 고객님들</span>께는 업그레이드 비용을 지원드립니다. (택배비 또는 출장비 실비만 발생)</li>
       <li><span class="highlight">2019년도 구매하신 마베드1</span> (Ma Bed 1 다리가 안올라가는 버전) 제품의 경우 하드웨어 구조상 본 업데이트가 불가합니다.</li>
       <li>교체 또는 사용 중 제품에 이상이 발생할 경우 즉시 고객센터로 알려주시기 바랍니다.</li>
     </ul>
-  </div>
-
-  <div class="event-section">
-    <h2>🎉 [EVENT] 버킷츠 AI 음성제어 자랑하고 스벅 커피 받자!</h2>
-    <p>"헤이 구글, 침대 독서 모드!"<br>목소리로 움직이는 버킷츠 모션베드를 자랑해 주세요.<br>리뷰를 남겨주신 모든 분께 <strong> 100% 사은품</strong>을 쏩니다!</p>
-    <div class="event-box">
-      🎁 <strong>참여 혜택:</strong> 스타벅스 아메리카노 기프티콘 1매 (전원 증정)<br><br>
-      📱 <strong>참여 방법</strong><br>
-      <strong>1.</strong> 음성 작동 영상을 촬영합니다. (<a href="https://www.instagram.com/reel/DWtVbVtEmWe/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank">참고 영상</a>)<br>
-      <strong>2.</strong> SNS에 올리기 쑥스럽다면? <a href="https://open.kakao.com/o/sV8F0c4c" target="_blank">버킷츠 오픈채팅</a>으로 전송!<br>
-      <strong>3.</strong> 인스타 릴스 업로드 시 태그 필수: @birkits #버킷츠 #모션베드 #AI침대
-    </div>
   </div>
 
   <div class="form-section">
@@ -135,80 +133,102 @@
       ✉️ <strong>문의:</strong> <a href="http://talk.naver.com/WCE5B4" target="_blank">네이버 톡톡 상담하기</a>
     </div>
 
-    <div class="content-box" style="border-left: 4px solid #e53935; background: #fff3f3;">
-      <h3 style="margin-top: 0; color: #e53935;">📝 신청서 작성 및 입금 안내</h3>
-      안내된 계좌로 비용 입금 후 작성해주셔야 최종 접수됩니다.<br><br>
-      💳 <strong>신한은행 597-04-532966 (예금주: 하영웅(버킷츠))</strong>
-      <button type="button" onclick="copyAccount()" style="margin-left: 8px; padding: 4px 10px; font-size: 12px; background-color: #e53935; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; vertical-align: middle;">복사하기</button>
+    <div class="tab-container">
+      <button class="tab-btn active" id="tabSubmit" onclick="switchTab('submit')">✍️ 신규 신청하기</button>
+      <button class="tab-btn" id="tabSearch" onclick="switchTab('search')">🔍 내역 조회 및 수정</button>
     </div>
 
-    <form id="upgradeForm" onsubmit="submitForm(event)">
-      <div class="form-group">
-        <label>1. 성함 (입금자명 동일하게)</label>
-        <input type="text" name="name" required placeholder="예: 홍길동">
+    <div id="searchBox" class="search-box" style="display: none;">
+      <p style="margin-top: 0; font-weight: bold; color: #1a1a1a;">신청 시 입력한 정보를 입력해주세요.</p>
+      <input type="text" id="searchName" placeholder="성함 입력">
+      <input type="tel" id="searchPhone" placeholder="연락처 (010-XXXX-XXXX)">
+      <button class="btn-search-action" id="searchBtn" onclick="searchApplication()">내역 조회하기</button>
+      <div id="searchLoading" class="loading" style="display:none; color: #0056b3;">조회 중입니다...</div>
+    </div>
+
+    <div id="formContainer">
+      <div class="content-box" style="border-left: 4px solid #e53935; background: #fff3f3;" id="noticeBox">
+        <h3 style="margin-top: 0; color: #e53935;">📝 신청서 작성 및 입금 안내</h3>
+        안내된 계좌로 비용 입금 후 작성해주셔야 최종 접수됩니다.<br><br>
+        💳 <strong>신한은행 597-04-532966 (예금주: 하영웅(버킷츠))</strong>
+        <button type="button" onclick="copyAccount()" style="margin-left: 8px; padding: 4px 10px; font-size: 12px; background-color: #e53935; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; vertical-align: middle;">복사하기</button>
       </div>
 
-      <div class="form-group">
-        <label>2. 연락처</label>
-        <input type="tel" name="phone" required placeholder="010-1234-5678">
-      </div>
+      <form id="upgradeForm" onsubmit="submitForm(event)">
+        <input type="hidden" id="actionType" name="action" value="submit">
+        <input type="hidden" id="rowIndex" name="rowIndex" value="">
 
-      <div class="form-group">
-        <label>3. 배송/설치 주소</label>
-        <div class="address-group">
-          <input type="text" id="zipcode" name="zipcode" placeholder="우편번호 (클릭)" readonly required onclick="openDaumPostcode()" style="cursor: pointer; background-color: #f9f9f9;">
-          <button type="button" class="btn-search" onclick="openDaumPostcode()">주소 검색</button>
+        <div class="form-group">
+          <label>1. 성함 (입금자명 동일하게)</label>
+          <input type="text" id="name" name="name" required placeholder="예: 홍길동">
         </div>
-        <input type="text" id="address" name="address" placeholder="기본 주소 (클릭)" readonly required onclick="openDaumPostcode()" style="margin-bottom: 10px; cursor: pointer; background-color: #f9f9f9;">
-        <input type="text" id="detailAddress" name="detailAddress" placeholder="상세 주소를 입력해주세요" required>
-        
-        <div id="wrap" style="display:none; border:1px solid #ddd; width:100%; height:300px; margin-top:5px; position:relative;">
-          <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer; position:absolute; right:0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+
+        <div class="form-group">
+          <label>2. 연락처</label>
+          <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678">
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>4. 구매년도 선택</label>
-        <select id="purchaseYear" name="purchaseYear" onchange="updateOptions()" required>
-          <option value="" disabled selected>선택해주세요</option>
-          <option value="2025년 이후">2025년 이후 구매 (비용 지원 대상)</option>
-          <option value="2024년 이전">2024년 이전 구매</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label>3. 배송/설치 주소</label>
+          <div class="address-group">
+            <input type="text" id="zipcode" name="zipcode" placeholder="우편번호 (클릭)" readonly required onclick="openDaumPostcode()" style="cursor: pointer; background-color: #f9f9f9;">
+            <button type="button" class="btn-search" onclick="openDaumPostcode()">주소 검색</button>
+          </div>
+          <input type="text" id="address" name="address" placeholder="기본 주소 (클릭)" readonly required onclick="openDaumPostcode()" style="margin-bottom: 10px; cursor: pointer; background-color: #f9f9f9;">
+          <input type="text" id="detailAddress" name="detailAddress" placeholder="상세 주소를 입력해주세요" required>
+          
+          <div id="wrap" style="display:none; border:1px solid #ddd; width:100%; height:300px; margin-top:5px; position:relative;">
+            <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer; position:absolute; right:0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label>5. 희망 업그레이드 방법 (입금액 확인)</label>
-        <select id="upgradeOption" name="upgradeOption" required>
-          <option value="" disabled selected>먼저 구매 연도를 선택해주세요</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label>4. 구매년도 선택</label>
+          <select id="purchaseYear" name="purchaseYear" onchange="updateOptions()" required>
+            <option value="" disabled selected>선택해주세요</option>
+            <option value="2025년 이후">2025년 이후 구매 (비용 지원 대상)</option>
+            <option value="2024년 이전">2024년 이전 구매</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label>6. 수량</label>
-        <select name="quantity" required>
-          <option value="1" selected>1개</option>
-          <option value="2">2개</option>
-          <option value="3">3개</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label>5. 희망 업그레이드 방법 (입금액 확인)</label>
+          <select id="upgradeOption" name="upgradeOption" required>
+            <option value="" disabled selected>먼저 구매 연도를 선택해주세요</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label>7. 구매처 및 주문번호 (선택)</label>
-        <input type="text" name="orderInfo" placeholder="스마트스토어, 오늘의집 등">
-      </div>
+        <div class="form-group">
+          <label>6. 수량</label>
+          <select id="quantity" name="quantity" required>
+            <option value="1" selected>1개</option>
+            <option value="2">2개</option>
+            <option value="3">3개</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label>8. 추가 전달 내용</label>
-        <textarea name="comments" placeholder="추가 요청 사항이 있다면 적어주세요."></textarea>
-      </div>
+        <div class="form-group">
+          <label>7. 구매처 및 주문번호 (선택)</label>
+          <input type="text" id="orderInfo" name="orderInfo" placeholder="스마트스토어, 오늘의집 등">
+        </div>
 
-      <button type="submit" class="btn-submit" id="submitBtn">신청서 제출 및 접수</button>
-      <div class="loading" id="loadingMsg">데이터를 전송 중입니다...</div>
-    </form>
+        <div class="form-group">
+          <label>8. 추가 전달 내용</label>
+          <textarea id="comments" name="comments" placeholder="추가 요청 사항이 있다면 적어주세요."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">신청서 제출 및 접수</button>
+        <div class="loading" id="loadingMsg">데이터를 전송 중입니다...</div>
+      </form>
+    </div>
   </div>
 </div>
 
 <script>
+  // 배포된 구글 앱스 스크립트 웹앱 URL (대표님 URL 그대로 사용)
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2lmYhfX2Ey2Q192iOE2PfyTRnP8xEVYKa4at9sElzZoVyQkmvH3BFohvnhB8ba2lp/exec";
+
+  // 계좌번호 복사
   function copyAccount() {
     var textArea = document.createElement("textarea");
     textArea.value = "59704532966";
@@ -217,15 +237,13 @@
     try {
       document.execCommand('copy');
       alert("계좌번호(59704532966)가 복사되었습니다!");
-    } catch (err) {
-      alert("복사 실패. 번호를 직접 복사해주세요.");
-    }
+    } catch (err) { alert("복사 실패. 번호를 직접 복사해주세요."); }
     document.body.removeChild(textArea);
   }
 
+  // 다음 우편번호
   var element_wrap = document.getElementById('wrap');
   function foldDaumPostcode() { element_wrap.style.display = 'none'; }
-
   function openDaumPostcode() {
       var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
       new daum.Postcode({
@@ -242,39 +260,129 @@
       element_wrap.style.display = 'block';
   }
 
+  // 가격 옵션 업데이트
   function updateOptions() {
     var year = document.getElementById("purchaseYear").value;
     var optionSelect = document.getElementById("upgradeOption");
+    var currentValue = optionSelect.value; // 조회 시 기존 선택값 유지를 위해
+    
     optionSelect.innerHTML = "";
-    
-    /* 여기서 기본 가격을 10000원에서 15000원으로 변경했습니다! */
     var basePrice = (year === "2025년 이후") ? 15000 : 50000; 
-    
     var sudoPrice = basePrice + 30000;
     var jibangPrice = basePrice + 60000;
     
     optionSelect.options.add(new Option("방법 1. 완제품 자가 교체 (₩" + basePrice.toLocaleString() + " 입금)", "자가교체(" + basePrice.toLocaleString() + ")"));
     optionSelect.options.add(new Option("방법 2. 기사 방문 설치 - 수도권 (₩" + sudoPrice.toLocaleString() + " 입금)", "방문-수도권(" + sudoPrice.toLocaleString() + ")"));
     optionSelect.options.add(new Option("방법 3. 기사 방문 설치 - 지방 (₩" + jibangPrice.toLocaleString() + " 입금)", "방문-지방(" + jibangPrice.toLocaleString() + ")"));
+
+    // 옵션 재생성 후 기존 값이 있다면 복구 시도
+    for(var i=0; i<optionSelect.options.length; i++){
+      if(optionSelect.options[i].value === currentValue) {
+        optionSelect.selectedIndex = i;
+        break;
+      }
+    }
   }
 
+  // 탭 전환 로직
+  function switchTab(mode) {
+    document.getElementById('tabSubmit').classList.remove('active');
+    document.getElementById('tabSearch').classList.remove('active');
+    document.getElementById('upgradeForm').reset(); // 폼 초기화
+
+    if (mode === 'submit') {
+      document.getElementById('tabSubmit').classList.add('active');
+      document.getElementById('searchBox').style.display = 'none';
+      document.getElementById('formContainer').style.display = 'block';
+      document.getElementById('noticeBox').style.display = 'block';
+      
+      document.getElementById('actionType').value = "submit";
+      document.getElementById('rowIndex').value = "";
+      document.getElementById('submitBtn').innerText = "신청서 제출 및 접수";
+      document.getElementById('submitBtn').style.background = "#1a1a1a";
+    } else {
+      document.getElementById('tabSearch').classList.add('active');
+      document.getElementById('searchBox').style.display = 'block';
+      document.getElementById('formContainer').style.display = 'none'; // 조회 전에는 폼 숨김
+    }
+  }
+
+  // 내역 조회 API 호출
+  function searchApplication() {
+    var searchName = document.getElementById('searchName').value.trim();
+    var searchPhone = document.getElementById('searchPhone').value.trim();
+
+    if(!searchName || !searchPhone) {
+      alert("성함과 연락처를 정확히 입력해주세요.");
+      return;
+    }
+
+    document.getElementById('searchBtn').style.display = 'none';
+    document.getElementById('searchLoading').style.display = 'block';
+
+    var params = new URLSearchParams();
+    params.append('action', 'search');
+    params.append('searchName', searchName);
+    params.append('searchPhone', searchPhone);
+
+    fetch(SCRIPT_URL, { method: 'POST', body: params })
+    .then(response => response.json())
+    .then(result => {
+      if(result.result === "success") {
+        alert("신청 내역을 불러왔습니다. 내용 수정 후 하단의 [저장] 버튼을 눌러주세요.");
+        var d = result.data;
+        
+        // 폼 노출 및 세팅
+        document.getElementById('formContainer').style.display = 'block';
+        document.getElementById('noticeBox').style.display = 'none'; // 수정 시에는 입금안내 숨김
+        document.getElementById('actionType').value = "update";
+        document.getElementById('rowIndex').value = d.rowIndex;
+        document.getElementById('submitBtn').innerText = "✅ 수정사항 저장하기";
+        document.getElementById('submitBtn').style.background = "#0056b3";
+
+        // 데이터 맵핑
+        document.getElementById('name').value = d.name;
+        document.getElementById('phone').value = d.phone;
+        document.getElementById('zipcode').value = d.zipcode;
+        document.getElementById('address').value = d.address;
+        document.getElementById('detailAddress').value = d.detailAddress;
+        document.getElementById('purchaseYear').value = d.purchaseYear;
+        updateOptions(); // 연도에 맞춰 옵션 리스트 생성
+        document.getElementById('upgradeOption').value = d.upgradeOption;
+        document.getElementById('quantity').value = d.quantity;
+        document.getElementById('orderInfo').value = d.orderInfo;
+        document.getElementById('comments').value = d.comments;
+        
+      } else {
+        alert(result.message || "내역을 찾을 수 없습니다.");
+      }
+    })
+    .catch(error => { alert("조회 중 통신 오류가 발생했습니다."); })
+    .finally(() => {
+      document.getElementById('searchBtn').style.display = 'block';
+      document.getElementById('searchLoading').style.display = 'none';
+    });
+  }
+
+  // 제출 및 수정 통신
   function submitForm(event) {
     event.preventDefault();
     document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('loadingMsg').style.display = 'block';
+    
     var form = document.getElementById('upgradeForm');
-    var googleAppScriptUrl = "https://script.google.com/macros/s/AKfycbx2lmYhfX2Ey2Q192iOE2PfyTRnP8xEVYKa4at9sElzZoVyQkmvH3BFohvnhB8ba2lp/exec";
-    fetch(googleAppScriptUrl, {
+    
+    fetch(SCRIPT_URL, {
       method: 'POST',
       body: new URLSearchParams(new FormData(form))
     })
     .then(response => response.json())
     .then(result => {
       if(result.result === "success") {
-        alert("신청이 완료되었습니다! 입금 확인 후 순차 발송됩니다.");
-        form.reset();
-        window.scrollTo(0, 0);
-      } else { alert("서버 오류가 발생했습니다."); }
+        var isUpdate = (document.getElementById('actionType').value === 'update');
+        alert(isUpdate ? "✅ 신청 내역이 수정되었습니다." : "🎉 신청이 완료되었습니다! 입금 확인 후 순차 발송됩니다.");
+        location.reload(); // 성공 시 페이지 새로고침
+      } else { alert("서버 오류가 발생했습니다: " + result.message); }
     })
     .catch(error => { alert("전송 지연이 발생했습니다. 톡톡으로 문의주세요."); })
     .finally(() => {
