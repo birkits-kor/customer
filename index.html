@@ -36,7 +36,7 @@
     .form-section { padding: 30px 20px; background: #fff; }
     .form-group { margin-bottom: 20px; }
     label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1a1a1a; }
-    input[type="text"], input[type="tel"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s; }
+    input[type="text"], input[type="tel"], input[type="email"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s; }
     input:focus, select:focus, textarea:focus { border-color: #1a1a1a; outline: none; }
     textarea { resize: vertical; height: 80px; }
     .address-group { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -169,7 +169,13 @@
         </div>
 
         <div class="form-group">
-          <label>3. 배송/설치 주소</label>
+          <label for="email">3. 이메일 주소</label>
+          <input type="email" id="email" name="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="example@email.com">
+          <p class="text-sm" style="margin: 6px 0 0;">신청 내용과 조회·수정 방법을 메일로 보내드립니다.</p>
+        </div>
+
+        <div class="form-group">
+          <label>4. 배송/설치 주소</label>
           <div class="address-group">
             <input type="text" id="zipcode" name="zipcode" placeholder="우편번호 (클릭)" readonly required onclick="openDaumPostcode()" style="cursor: pointer; background-color: #f9f9f9;">
             <button type="button" class="btn-search" onclick="openDaumPostcode()">주소 검색</button>
@@ -183,7 +189,7 @@
         </div>
 
         <div class="form-group">
-          <label>4. 구매년도 선택</label>
+          <label>5. 구매년도 선택</label>
           <select id="purchaseYear" name="purchaseYear" onchange="updateOptions()" required>
             <option value="" disabled selected>선택해주세요</option>
             <option value="2025년 이후">2025년 이후 구매 (비용 지원 대상)</option>
@@ -192,14 +198,14 @@
         </div>
 
         <div class="form-group">
-          <label>5. 희망 업그레이드 방법 (입금액 확인)</label>
+          <label>6. 희망 업그레이드 방법 (입금액 확인)</label>
           <select id="upgradeOption" name="upgradeOption" required>
             <option value="" disabled selected>먼저 구매 연도를 선택해주세요</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>6. 수량</label>
+          <label>7. 수량</label>
           <select id="quantity" name="quantity" required>
             <option value="1" selected>1개</option>
             <option value="2">2개</option>
@@ -208,12 +214,12 @@
         </div>
 
         <div class="form-group">
-          <label>7. 구매처 및 주문번호 (선택)</label>
+          <label>8. 구매처 및 주문번호 (선택)</label>
           <input type="text" id="orderInfo" name="orderInfo" placeholder="스마트스토어, 오늘의집 등">
         </div>
 
         <div class="form-group">
-          <label>8. 추가 전달 내용</label>
+          <label>9. 추가 전달 내용</label>
           <textarea id="comments" name="comments" placeholder="추가 요청 사항이 있다면 적어주세요."></textarea>
         </div>
 
@@ -298,6 +304,7 @@
       
       document.getElementById('actionType').value = "submit";
       document.getElementById('rowIndex').value = "";
+      document.getElementById('email').required = true;
       document.getElementById('submitBtn').innerText = "신청서 제출 및 접수";
       document.getElementById('submitBtn').style.background = "#1a1a1a";
     } else {
@@ -343,6 +350,9 @@
         // 데이터 맵핑
         document.getElementById('name').value = d.name;
         document.getElementById('phone').value = d.phone;
+        document.getElementById('email').value = d.email || "";
+        // 이메일 없이 접수된 기존 신청도 계속 수정할 수 있습니다.
+        document.getElementById('email').required = Boolean(d.email);
         document.getElementById('zipcode').value = d.zipcode;
         document.getElementById('address').value = d.address;
         document.getElementById('detailAddress').value = d.detailAddress;
@@ -380,7 +390,13 @@
     .then(result => {
       if(result.result === "success") {
         var isUpdate = (document.getElementById('actionType').value === 'update');
-        alert(isUpdate ? "✅ 신청 내역이 수정되었습니다." : "🎉 신청이 완료되었습니다! 입금 확인 후 순차 발송됩니다.");
+        if (isUpdate) {
+          alert("✅ 신청 내역이 수정되었습니다.");
+        } else if (result.customerEmailSent) {
+          alert("🎉 신청이 완료되었습니다!\n입력하신 이메일로 접수 확인 메일을 보내드렸습니다.\n입금 확인 후 순차 발송됩니다.");
+        } else {
+          alert("신청은 정상 접수되었지만 접수 확인 메일을 보내지 못했습니다.\n중복 신청하지 마시고, [내역 조회 및 수정]에서 이메일 주소를 확인하거나 톡톡으로 문의해주세요.");
+        }
         location.reload(); // 성공 시 페이지 새로고침
       } else { alert("서버 오류가 발생했습니다: " + result.message); }
     })
