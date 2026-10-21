@@ -157,6 +157,8 @@
       <form id="upgradeForm" onsubmit="submitForm(event)">
         <input type="hidden" id="actionType" name="action" value="submit">
         <input type="hidden" id="rowIndex" name="rowIndex" value="">
+        <input type="hidden" id="lookupName" name="lookupName" value="">
+        <input type="hidden" id="lookupPhone" name="lookupPhone" value="">
 
         <div class="form-group">
           <label>1. 성함 (입금자명 동일하게)</label>
@@ -344,6 +346,8 @@
         document.getElementById('noticeBox').style.display = 'none'; // 수정 시에는 입금안내 숨김
         document.getElementById('actionType').value = "update";
         document.getElementById('rowIndex').value = d.rowIndex;
+        document.getElementById('lookupName').value = d.name;
+        document.getElementById('lookupPhone').value = d.phone;
         document.getElementById('submitBtn').innerText = "✅ 수정사항 저장하기";
         document.getElementById('submitBtn').style.background = "#0056b3";
 
