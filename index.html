@@ -391,7 +391,13 @@
       if(result.result === "success") {
         var isUpdate = (document.getElementById('actionType').value === 'update');
         if (isUpdate) {
-          alert("✅ 신청 내역이 수정되었습니다.");
+          if (result.customerEmailSent) {
+            alert("✅ 신청 내역이 수정되었습니다.\n입력하신 이메일로 수정 확인 메일을 보내드렸습니다.");
+          } else if (result.customerEmailSkipped) {
+            alert("✅ 신청 내역이 수정되었습니다.\n등록된 이메일이 없어 수정 확인 메일은 보내지 않았습니다.");
+          } else {
+            alert("신청 내역은 수정되었지만 확인 메일을 보내지 못했습니다.\n중복 신청하지 마시고 톡톡으로 문의해주세요.");
+          }
         } else if (result.customerEmailSent) {
           alert("🎉 신청이 완료되었습니다!\n입력하신 이메일로 접수 확인 메일을 보내드렸습니다.\n입금 확인 후 순차 발송됩니다.");
         } else {
@@ -405,6 +411,12 @@
       document.getElementById('submitBtn').style.display = 'block';
       document.getElementById('loadingMsg').style.display = 'none';
     });
+  }
+  // 메일의 확인·수정 링크로 들어오면 조회 화면만 엽니다. 자동 조회나 수정은 하지 않습니다.
+  var mailManageAction = new URLSearchParams(window.location.search).get('manageAction');
+  if (mailManageAction === 'view' || mailManageAction === 'change') {
+    switchTab('search');
+    document.getElementById('searchBox').scrollIntoView({ block: 'start' });
   }
 </script>
 
