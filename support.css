@@ -24,3 +24,11 @@
  .task-copy h3 .card-arrow{flex-basis:21px;width:21px}
  .card-arrow svg{width:21px;height:21px}
 }
+
+/* Motion-bed configuration and quote link. */
+.quote-help{text-decoration:none;display:flex;gap:22px;border-color:#cdd4c2;background:#eef2e7;transition:border-color .15s,background .15s}
+.quote-help:hover{border-color:#899b79;background:#e9efdf}
+.quote-help-icon{flex:0 0 48px;color:var(--green)}
+.quote-help-copy{flex:1;min-width:0}
+.quote-help-arrow{flex:0 0 auto;font-size:26px;color:var(--green)}
+@media(max-width:600px){.quote-help{display:flex;gap:15px}.quote-help-icon{display:none}.quote-help h2{font-size:19px}.quote-help p{font-size:13px}.quote-help-arrow{font-size:24px}}
