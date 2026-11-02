@@ -2,6 +2,7 @@
 const API='https://script.google.com/macros/s/AKfycbx2lmYhfX2Ey2Q192iOE2PfyTRnP8xEVYKa4at9sElzZoVyQkmvH3BFohvnhB8ba2lp/exec';
 const PARTS={motor:{label:'모터',price:55000,icon:'⚙'},wifi:{label:'와이파이모듈',price:15000,icon:'◉'},control:{label:'컨트롤박스',price:75000,icon:'▣'},board:{label:'보드만',price:55000,icon:'▦'},remote:{label:'리모컨(수신기 포함)',price:15000,icon:'▤'}};
 const FAQ_INDEX=[
+ {title:'컨트롤박스 소프트웨어 1.3.7 업데이트',description:'USB 연결·프로그램 다운로드·Windows 실행 안내',keywords:'펌웨어 업데이트 소프트웨어 프로그램 업로더 다운로드 usb 윈도우 실행 드라이버 OTA',url:'https://birkits.com/update.html',top:true},
  {title:'모션베드 견적내기',description:'프레임·매트리스·옵션을 고르고 예상 견적 확인',keywords:'모션베드 견적 견적내기 견적서 가격 금액 구매 구성 마베드 슈브 옵션 침대',url:'https://birkits-kor.github.io/guide/',top:true},
  {title:'앱·음성 제어 업그레이드 신청',description:'구형 앱에서 헤이홈 앱으로 변경',keywords:'업그레이드 구글 제미나이 ai 음성 헤이홈 앱 교체',url:'./index.html'},
  {title:'부품 택배 신청·비용',description:'모터·모듈·컨트롤박스·보드·리모컨',keywords:'부품 비용 가격 택배 as 에이에스 교체 구매 모터 보드 컨트롤박스',url:'#parts'},
@@ -57,3 +58,4 @@ $('faqSearch').addEventListener('input',event=>{const q=event.target.value.trim(
 function route(){announce('');const hash=location.hash.slice(1);if(hash.startsWith('token=')){const token=new URLSearchParams(hash).get('token')||'';if(!/^[\w-]+\.[\w-]+$/.test(token)){showPage('manage');$('manageLoading').textContent='관리 링크가 올바르지 않습니다. 최신 안내 메일을 확인해주세요.';return;}loadManagement(token);return;}loadSequence++;const [path,query]=hash.split('?'),[name,detail]=path.split('/');const page=name==='remote'?'parts':['parts','troubleshoot','find'].includes(name)?name:'home';showPage(page);if(page==='parts'){const key=name==='remote'?'remote':new URLSearchParams(query||'').get('part');if(PARTS[key]){$('partsForm').querySelectorAll('[name=partKey]').forEach(r=>r.checked=r.value===key);refreshPartForm($('partsForm'));}}window.scrollTo({top:0,behavior:'auto'});if(page==='troubleshoot'&&detail&&detail.startsWith('faq-')){const item=document.getElementById(detail);if(item?.tagName==='DETAILS'){item.open=true;item.scrollIntoView({block:'center',behavior:'smooth'});}}}
 window.addEventListener('hashchange',route);
 buildPartForm($('partsForm'));updateRefundFields();route();
+
